@@ -39,6 +39,10 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def add_product(self, product):
+        self.products.append(product)
+        db.session.commit()
+
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)

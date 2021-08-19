@@ -1,5 +1,5 @@
 from app import app
-from app.models import User #Product
+from app.models import User, Product
 from flask import jsonify, request
 
 
@@ -30,20 +30,19 @@ def create_user():
     return jsonify(user.to_dict()), 201
 
 
-# @app.route('/products')
-# def products():
-#     products = [u.to_dict() for u in Product.query.all()]
-#     return jsonify(products=products)
+@app.route('/products')
+def products():
+    products = [u.to_dict() for u in Product.query.all()]
+    return jsonify(products=products)
 
 
-# @app.route('/products/<int:id>')
-# def product(id):
-#     product = Product.query.get_or_404(id)
-#     return jsonify(product.to_dict())
+@app.route('/products/<int:id>')
+def product(id):
+    product = Product.query.get_or_404(id)
+    return jsonify(product.to_dict())
 
 
 # @app.route('/addtocart/<int:prod_id>', methods=['POST'])
-
 # def add_to_cart(prod_id):
 #     prod = Product.query.get_or_404(prod_id)
 #     user = User.query.get(1)
