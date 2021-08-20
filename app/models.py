@@ -58,11 +58,13 @@ class User(db.Model):
         return user_dict
 
     def from_dict(self, data):
-        for attr in ['first_name', 'last_name', 'username', 'email', 'password']:
-            if attr == 'password':
-                setattr(self, attr, self.hash_password(data[attr]))
-            else:
-                setattr(self, attr, data[attr])
+        user_attrs = {'first_name', 'last_name', 'username', 'email', 'password'}
+        for attr in data:
+            if attr in user_attrs:
+                if attr == 'password':
+                    setattr(self, attr, self.hash_password(data[attr]))
+                else:
+                    setattr(self, attr, data[attr])
         db.session.add(self)
         db.session.commit()
 

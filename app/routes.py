@@ -38,6 +38,15 @@ def create_user():
     return jsonify(user.to_dict()), 201
 
 
+@app.route('/update-user', methods=['POST'])
+@token_auth.login_required
+def update_user():
+    data = request.get_json()
+    user = token_auth.current_user()
+    user.from_dict(data)
+    return jsonify(user.to_dict())
+
+
 @app.route('/products')
 def products():
     products = [u.to_dict() for u in Product.query.all()]
