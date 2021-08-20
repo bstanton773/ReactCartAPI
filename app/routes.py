@@ -1,8 +1,12 @@
 from app import app
 from app.auth import basic_auth, token_auth
 from app.models import User, Product
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/tokens', methods=['POST'])
 @basic_auth.login_required
