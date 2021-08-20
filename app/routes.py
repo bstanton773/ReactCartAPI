@@ -1,6 +1,14 @@
 from app import app
+from app.auth import basic_auth, token_auth
 from app.models import User, Product
 from flask import jsonify, request
+
+
+@app.route('/tokens', methods=['POST'])
+@basic_auth.login_required
+def get_token():
+    token = basic_auth.current_user().get_token()
+    return jsonify({ 'token': token })
 
 
 @app.route('/users')
@@ -42,10 +50,11 @@ def product(id):
     return jsonify(product.to_dict())
 
 
-# @app.route('/addtocart/<int:prod_id>', methods=['POST'])
-# def add_to_cart(prod_id):
-#     prod = Product.query.get_or_404(prod_id)
-#     user = User.query.get(1)
-#     user.add_product(prod)
+@app.route('/add-to-cart/<int:prod_id>', methods=['POST'])
+@token_auth.login_required
+def add_to_cart(prod_id):
+    prod = Product.query.get_or_404(prod_id)
+    user = token_auth.current_user()
+    user.add_product(prod)
     
-#     return jsonify(user.to_dict())
+    return jsonify(user.to_dict())
