@@ -66,8 +66,13 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def add_product(self, product):
-        self.products.append(product)
+    def add_to_cart(self, product):
+        if product not in self.products:
+            self.products.append(product)
+            db.session.commit()
+
+    def remove_from_cart(self, product):
+        self.products.remove(product)
         db.session.commit()
 
 
