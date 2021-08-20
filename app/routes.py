@@ -55,6 +55,17 @@ def product(id):
 def add_to_cart(prod_id):
     prod = Product.query.get_or_404(prod_id)
     user = token_auth.current_user()
-    user.add_product(prod)
+    user.add_to_cart(prod)
     
+    return jsonify(user.to_dict())
+
+
+@app.route('/remove-from-cart/<int:prod_id>', methods=['DELETE'])
+@token_auth.login_required
+def remove_from_cart(prod_id):
+    prod = Product.query.get_or_404(prod_id)
+    user = token_auth.current_user()
+    if prod not in user.products:
+        return jsonify({"error": f"This product is not in this user's cart: {prod.name}"}), 400
+    user.remove_from_cart(prod)
     return jsonify(user.to_dict())
