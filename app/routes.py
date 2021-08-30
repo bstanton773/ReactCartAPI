@@ -11,8 +11,13 @@ def index():
 @app.route('/tokens', methods=['POST'])
 @basic_auth.login_required
 def get_token():
-    token = basic_auth.current_user().get_token()
-    return jsonify({ 'token': token })
+    user = basic_auth.current_user()
+    token = user.get_token()
+    user_id = user.id
+    return jsonify({ 
+        'token': token,
+        'user_id': user_id
+    })
 
 
 @app.route('/users')
